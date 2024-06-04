@@ -1,0 +1,51 @@
+version: "3"
+
+services:
+    # image project
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        depends_on:
+            mongo:
+                condition: service_healthy
+        networks:
+            - integra-cep
+
+    # nginx
+    nginx:
+        image: nginx:alpine
+        restart: unless-stopped
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/:/etc/nginx/conf.d/
+        networks:
+            - integra-cep
+
+    # nosql
+    mongo:
+        container_name: mongo
+        image: mongo:latest
+        ports:
+            - "27017:27017"
+        environment:
+            MONGO_INITDB_DATABASE: mongo
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root123
+        healthcheck:
+            test: echo 'db.runCommand("ping").ok' | mongosh mongodb:27017 --quiet
+            interval: 10s
+            timeout: 10s
+            retries: 5
+        networks:
+            - integra-cep
+
+networks:
+    integra-cep:
+        driver: bridge
