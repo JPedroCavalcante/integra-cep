@@ -22,6 +22,12 @@ Crie o Arquivo .env
 cp .env.example .env
 ```
 
+Insira as credênciais de usuário que serão utilizadas para se logar
+```sh
+API_AUTH_USER=
+API_AUTH_PASSWORD=
+```
+
 Acesse o container app
 ```sh
 docker-compose exec app bash
