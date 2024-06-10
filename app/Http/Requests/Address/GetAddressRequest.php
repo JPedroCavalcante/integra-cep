@@ -22,7 +22,7 @@ class GetAddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'zipcode' => ['required', 'numeric', 'digits:8'],
         ];
     }
 }
