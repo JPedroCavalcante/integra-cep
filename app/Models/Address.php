@@ -23,7 +23,5 @@ class Address extends Model
         'type',
         'latitude',
         'longitude',
-        'addressable_id',
-        'addressable_type',
     ];
 }
